@@ -14,7 +14,7 @@
     "start": "node server/server.js",
     "lint": "npm run lint:format && npm run lint:eslint",
     "lint:format": "prettier --check \"server/**/*.js\" \"client/src/**/*.{js,jsx}\" vite.config.js",
-    "lint:eslint": "eslint server client/src vite.config.js",
+    "lint:eslint": "eslint --config .eslintrc.cjs server client/src vite.config.js",
     "format": "prettier --write \"server/**/*.js\" \"client/src/**/*.{js,jsx}\" vite.config.js",
     "test:only": "jest --passWithNoTests",
     "update": "mate-scripts update",
