@@ -57,6 +57,7 @@ export const registerUser = async ({ name, email, password }) => {
   });
 
   await sendActivationEmail(user.email, user.activationToken);
+
   return { message: 'User created', userId: user.id };
 };
 
@@ -73,6 +74,7 @@ export const loginUser = async ({ email, password }) => {
 
   const accessToken = createAccessToken(user);
   const refreshToken = createRefreshToken(user);
+
   user.refreshToken = refreshToken;
   await user.save();
 
@@ -88,8 +90,10 @@ export const activateUser = async (token) => {
 
   user.isActive = true;
   user.activationToken = null;
+
   const accessToken = createAccessToken(user);
   const refreshToken = createRefreshToken(user);
+
   user.refreshToken = refreshToken;
   await user.save();
 
@@ -120,6 +124,7 @@ export const requestPasswordReset = async (email) => {
   }
 
   const resetToken = crypto.randomBytes(32).toString('hex');
+
   user.resetPasswordToken = resetToken;
   user.resetPasswordExpires = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
@@ -177,6 +182,7 @@ export const getCurrentUser = async (userId) => {
 
 export const updateUserName = async (userId, name) => {
   const user = await getUserOrThrow(userId);
+
   user.name = name;
   await user.save();
 
@@ -236,10 +242,12 @@ export const requestEmailChange = async (userId, password, newEmail) => {
   }
 
   const emailChangeToken = crypto.randomBytes(32).toString('hex');
+
   user.pendingEmail = newEmail;
   user.emailChangeToken = emailChangeToken;
   user.emailChangeExpires = new Date(Date.now() + 15 * 60 * 1000);
   await user.save();
+
   const delivery = await sendConfirmNewEmail(newEmail, emailChangeToken);
 
   if (!wasAcceptedByProvider(delivery, newEmail)) {
@@ -266,6 +274,7 @@ export const confirmEmailChange = async (token) => {
 
   const oldEmail = user.email;
   const newEmail = user.pendingEmail;
+
   user.email = newEmail;
   user.pendingEmail = null;
   user.emailChangeToken = null;

@@ -17,6 +17,7 @@ export const forgotPassword = async (req, res) =>
 
 export const resetPassword = async (req, res) => {
   const { password, confirmation } = req.body;
+
   res.json(
     await authService.resetUserPassword(
       req.params.token,
@@ -35,6 +36,7 @@ export const changeName = async (req, res) =>
 
 export const changePassword = async (req, res) => {
   const { oldPassword, newPassword, confirmation } = req.body;
+
   res.json(
     await authService.updateUserPassword(
       req.user.userId,
@@ -47,6 +49,7 @@ export const changePassword = async (req, res) => {
 
 export const changeEmail = async (req, res) => {
   const { password, newEmail } = req.body;
+
   res.json(
     await authService.requestEmailChange(req.user.userId, password, newEmail),
   );
