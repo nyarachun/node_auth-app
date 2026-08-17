@@ -19,20 +19,30 @@ export const AuthProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(true);
 
-  const startSession = useCallback(
-    async ({ accessToken: newAccessToken, refreshToken }) => {
-      const me = await authService.getMe(newAccessToken);
+  const startSession = async (accessToken, refreshToken) => {
+    try {
+      const user = await authService.getMe(accessToken);
 
-      localStorage.setItem('accessToken', newAccessToken);
+      setUser(user);
+      setAccessToken(accessToken);
+
+      localStorage.setItem('accessToken', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      setAccessToken(newAccessToken);
-      setUser(me.user);
-      setLoading(false);
+    } catch (error) {
+      setUser(null);
+      setAccessToken(null);
 
-      return me.user;
-    },
-    [],
-  );
+      throw error;
+    }
+  };
+
+  const fetchMe = async () => {
+    if (!accessToken) {
+      throw new Error('No access token');
+    }
+
+    return authService.getMe(accessToken);
+  };
 
   const login = useCallback(
     async (credentials) => {
@@ -96,6 +106,7 @@ export const AuthProvider = ({ children }) => {
         login,
         startSession,
         logout,
+        fetchMe,
       }}
     >
       {children}

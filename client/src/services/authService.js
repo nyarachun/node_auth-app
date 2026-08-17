@@ -54,12 +54,17 @@ export const resetPassword = (token, data) =>
     body: JSON.stringify(data),
   });
 
-export const getMe = (accessToken) =>
-  request(`${API_URL}/me`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+export const getMe = (accessToken) => {
+  const headers = {};
+
+  if (accessToken) {
+    headers.Authorization = `Bearer ${accessToken}`;
+  }
+
+  return request(`${API_URL}/me`, {
+    headers,
   });
+};
 
 export const changeName = (accessToken, name) =>
   request(`${API_URL}/me/name`, {

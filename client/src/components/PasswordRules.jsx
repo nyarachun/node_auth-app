@@ -1,4 +1,4 @@
-const PasswordRules = ({ password }) => {
+const PasswordRules = ({ password = '' }) => {
   const rules = [
     {
       text: 'At least 8 characters',
