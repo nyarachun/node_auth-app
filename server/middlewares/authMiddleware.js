@@ -3,7 +3,7 @@ import { User } from '../models/User.js';
 import ApiError from '../utils/ApiError.js';
 
 export const authMiddleware = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+  const authHeader = req.headers.authorization?.trim();
 
   if (!authHeader) {
     throw new ApiError(401, 'Authorization header is missing');
@@ -15,7 +15,13 @@ export const authMiddleware = async (req, res, next) => {
     throw new ApiError(401, 'Invalid authorization format');
   }
 
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
+  let decoded;
+
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch {
+    throw new ApiError(401, 'Invalid or expired token');
+  }
 
   const user = await User.findByPk(decoded.userId);
 
@@ -24,5 +30,6 @@ export const authMiddleware = async (req, res, next) => {
   }
 
   req.user = decoded;
+
   next();
 };

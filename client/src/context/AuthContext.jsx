@@ -45,28 +45,6 @@ export const AuthProvider = ({ children }) => {
     [startSession],
   );
 
-  const fetchMe = useCallback(async () => {
-    if (!accessToken) {
-      return null;
-    }
-
-    try {
-      const data = await authService.getMe(accessToken);
-
-      setUser(data.user);
-
-      return data.user;
-    } catch (error) {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-
-      setAccessToken(null);
-      setUser(null);
-
-      throw error;
-    }
-  }, [accessToken]);
-
   const logout = async () => {
     const refreshToken = localStorage.getItem('refreshToken');
 
@@ -118,7 +96,6 @@ export const AuthProvider = ({ children }) => {
         login,
         startSession,
         logout,
-        fetchMe,
       }}
     >
       {children}
