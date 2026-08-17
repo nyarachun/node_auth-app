@@ -1,8 +1,9 @@
+# IDE
 .idea
 .vscode
 
+# Node
 node_modules
-.env
-client/dist
 
+# MacOS
 .DS_Store

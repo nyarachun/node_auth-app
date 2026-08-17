@@ -18,7 +18,6 @@
     "format": "prettier --write \"server/**/*.js\" \"client/src/**/*.{js,jsx}\" vite.config.js",
     "test:only": "jest --passWithNoTests",
     "update": "mate-scripts update",
-    "postinstall": "npm run update",
     "test": "npm run lint && npm run test:only"
   },
   "author": "Mate academy",
